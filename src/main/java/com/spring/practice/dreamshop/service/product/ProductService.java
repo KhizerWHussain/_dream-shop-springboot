@@ -85,17 +85,17 @@ public class ProductService implements IProductService {
 
     @Override
     public List<Product> getByCategory(String category) {
-        return _product.findByCategoryName(category);
+        return _product.findByCategory_Name(category);
     }
 
     @Override
     public List<Product> getByBrand(String brand) {
-        return _product.findByBrandName(brand);
+        return _product.findByBrand(brand);
     }
 
     @Override
     public List<Product> getByCategoryAndBrand(String category, String brand) {
-        return _product.findByCategoryAndBrand(category, brand);
+        return _product.findByCategory_NameAndBrand(category, brand);
     }
 
     @Override

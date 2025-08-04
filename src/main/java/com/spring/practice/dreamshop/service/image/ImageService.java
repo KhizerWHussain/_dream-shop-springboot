@@ -19,8 +19,8 @@ import com.spring.practice.dreamshop.service.product.ProductService;
 
 import lombok.RequiredArgsConstructor;
 
-@Service
 @RequiredArgsConstructor
+@Service
 public class ImageService implements IImageService {
     private final ImageRepository _image;
     private final ProductService productService;

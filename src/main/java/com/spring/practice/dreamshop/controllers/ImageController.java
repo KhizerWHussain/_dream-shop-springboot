@@ -47,7 +47,7 @@ public class ImageController {
 
     }
 
-    @GetMapping("/download/${image_id}")
+    @GetMapping("/download/{image_id}")
     public ResponseEntity<ByteArrayResource> download(@PathVariable Long image_id) throws SQLException {
         Image image = imageInterface.getById(image_id);
 
