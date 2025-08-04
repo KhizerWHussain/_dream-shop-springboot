@@ -16,7 +16,7 @@ import com.spring.practice.dreamshop.dto.ImageDTO;
 import com.spring.practice.dreamshop.exception.NotFoundException;
 import com.spring.practice.dreamshop.model.Image;
 import com.spring.practice.dreamshop.response.APIResponse;
-import com.spring.practice.dreamshop.service.image.ImageService;
+import com.spring.practice.dreamshop.service.image.IImageService;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,15 +30,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 @RestController
 @RequestMapping("${api.prefix}/images")
 public class ImageController {
-    // private final IImageService imageInterface;
-    private final ImageService imageService;
+    private final IImageService imageInterface;
 
     @PostMapping("/upload-many")
     public ResponseEntity<APIResponse> save(@RequestParam List<MultipartFile> files,
             @RequestParam Long product_id) {
 
         try {
-            List<ImageDTO> imageDtos = imageService.save(files, product_id);
+            List<ImageDTO> imageDtos = imageInterface.save(files, product_id);
 
             return ResponseEntity.ok(new APIResponse(true, "images created successfully", imageDtos));
         } catch (Exception e) {
@@ -50,7 +49,7 @@ public class ImageController {
 
     @GetMapping("/download/${image_id}")
     public ResponseEntity<ByteArrayResource> download(@PathVariable Long image_id) throws SQLException {
-        Image image = imageService.getById(image_id);
+        Image image = imageInterface.getById(image_id);
 
         ByteArrayResource byteArray = new ByteArrayResource(
                 image.getBlog().getBytes(1, (int) image.getBlog().length()));
@@ -61,13 +60,13 @@ public class ImageController {
                 .body(byteArray);
     }
 
-    @PutMapping("image/update/{image_id}")
+    @PutMapping("/update/{image_id}")
     public ResponseEntity<APIResponse> update(@PathVariable Long image_id, @RequestBody MultipartFile file) {
         try {
-            Image image = imageService.getById(image_id);
+            Image image = imageInterface.getById(image_id);
 
             if (image != null) {
-                imageService.update(file, image_id);
+                imageInterface.update(file, image_id);
                 return ResponseEntity.ok(new APIResponse(true, "image updated successfully", image));
             }
         } catch (NotFoundException e) {
@@ -78,13 +77,13 @@ public class ImageController {
                 .body(new APIResponse(false, "Internal server error", null));
     }
 
-    @DeleteMapping("image/delete/{image_id}")
+    @DeleteMapping("/delete/{image_id}")
     public ResponseEntity<APIResponse> delete(@PathVariable Long image_id) {
         try {
-            Image image = imageService.getById(image_id);
+            Image image = imageInterface.getById(image_id);
 
             if (image != null) {
-                imageService.deleteById(image_id);
+                imageInterface.deleteById(image_id);
                 return ResponseEntity.ok(new APIResponse(true, "image deleted successfully", image));
             }
         } catch (NotFoundException e) {
