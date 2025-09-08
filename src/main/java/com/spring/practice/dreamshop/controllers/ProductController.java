@@ -1,5 +1,6 @@
 package com.spring.practice.dreamshop.controllers;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -70,7 +71,7 @@ public class ProductController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<APIResponse> delete(@PathVariable Long id) {
         try {
             productInterface.delete(id);
@@ -105,7 +106,7 @@ public class ProductController {
             List<Product> product = productInterface.getByCategoryAndBrand(category, brand);
 
             if (product.isEmpty()) {
-                return ResponseEntity.ok(new APIResponse(false, "Products not found successfully", null));
+                return ResponseEntity.ok(new APIResponse(false, "Products not found", null));
             }
 
             return ResponseEntity.ok(new APIResponse(true, "Products found successfully", product));
@@ -137,7 +138,8 @@ public class ProductController {
             List<Product> product = productInterface.getByBrand(brand);
 
             if (product.isEmpty()) {
-                return ResponseEntity.ok(new APIResponse(false, "Products not found successfully", null));
+                return ResponseEntity
+                        .ok(new APIResponse(false, "Products not found successfully", Collections.emptyList()));
             }
 
             return ResponseEntity.ok(new APIResponse(true, "Products found successfully", product));

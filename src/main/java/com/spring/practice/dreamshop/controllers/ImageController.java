@@ -52,7 +52,7 @@ public class ImageController {
         Image image = imageInterface.getById(image_id);
 
         ByteArrayResource byteArray = new ByteArrayResource(
-                image.getBlog().getBytes(1, (int) image.getBlog().length()));
+                image.getRaw_blob().getBytes(1, (int) image.getRaw_blob().length()));
 
         return ResponseEntity.ok().contentType(MediaType.parseMediaType(image.getType()))
                 .header(org.springframework.http.HttpHeaders.CONTENT_DISPOSITION,

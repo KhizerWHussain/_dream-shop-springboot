@@ -27,7 +27,7 @@ public class Image {
     private String type;
 
     @Lob
-    private Blob blog;
+    private Blob raw_blob;
 
     private String dowload_url;
 
