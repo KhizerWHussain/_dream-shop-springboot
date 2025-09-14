@@ -2,21 +2,18 @@ package com.spring.practice.dreamshop.controllers;
 
 import java.util.Collections;
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import com.spring.practice.dreamshop.dto.ProductDTO;
 import com.spring.practice.dreamshop.exception.NotFoundException;
 import com.spring.practice.dreamshop.model.Product;
 import com.spring.practice.dreamshop.request.AddProduct;
 import com.spring.practice.dreamshop.request.UpdateProduct;
 import com.spring.practice.dreamshop.response.APIResponse;
 import com.spring.practice.dreamshop.service.product.IProductService;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,16 +30,18 @@ public class ProductController {
     @GetMapping("/")
     public ResponseEntity<APIResponse> get() {
         List<Product> products = productInterface.get();
+        List<ProductDTO> productsDto = productInterface.getConvertedProducts(products);
 
-        return ResponseEntity.ok(new APIResponse(true, "Products found sucessfully", products));
+        return ResponseEntity.ok(new APIResponse(true, "Products found sucessfully", productsDto));
     }
 
     @GetMapping("/product/{id}")
     public ResponseEntity<APIResponse> getById(@PathVariable Long id) {
         try {
             Product product = productInterface.read(id);
+            ProductDTO productDto = productInterface.convertToDTO(product);
 
-            return ResponseEntity.ok(new APIResponse(true, "Product detail found successfully", product));
+            return ResponseEntity.ok(new APIResponse(true, "Product detail found successfully", productDto));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIResponse(false, e.getMessage(), null));
         }
@@ -52,8 +51,9 @@ public class ProductController {
     public ResponseEntity<APIResponse> create(@RequestBody AddProduct product) {
         try {
             Product prod = productInterface.create(product);
+            ProductDTO productDto = productInterface.convertToDTO(prod);
 
-            return ResponseEntity.ok(new APIResponse(true, "Product created successfully", prod));
+            return ResponseEntity.ok(new APIResponse(true, "Product created successfully", productDto));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new APIResponse(false, e.getMessage(), null));
@@ -65,7 +65,8 @@ public class ProductController {
     public ResponseEntity<APIResponse> update(@RequestBody UpdateProduct payload) {
         try {
             Product product = productInterface.update(payload, payload.getId());
-            return ResponseEntity.ok(new APIResponse(true, "Product updated successfully", product));
+            ProductDTO productDto = productInterface.convertToDTO(product);
+            return ResponseEntity.ok(new APIResponse(true, "Product updated successfully", productDto));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIResponse(false, e.getMessage(), null));
         }
@@ -92,7 +93,9 @@ public class ProductController {
                 return ResponseEntity.ok(new APIResponse(false, "Products not found successfully", null));
             }
 
-            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", product));
+            List<ProductDTO> productDtos = productInterface.getConvertedProducts(product);
+
+            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new APIResponse(false, e.getMessage(), null));
@@ -109,7 +112,9 @@ public class ProductController {
                 return ResponseEntity.ok(new APIResponse(false, "Products not found", null));
             }
 
-            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", product));
+            List<ProductDTO> productDtos = productInterface.getConvertedProducts(product);
+
+            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new APIResponse(false, e.getMessage(), null));
@@ -125,7 +130,9 @@ public class ProductController {
                 return ResponseEntity.ok(new APIResponse(false, "Products not found successfully", null));
             }
 
-            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", product));
+            List<ProductDTO> productDtos = productInterface.getConvertedProducts(product);
+
+            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new APIResponse(false, e.getMessage(), null));
@@ -142,7 +149,9 @@ public class ProductController {
                         .ok(new APIResponse(false, "Products not found successfully", Collections.emptyList()));
             }
 
-            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", product));
+            List<ProductDTO> productDtos = productInterface.getConvertedProducts(product);
+
+            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new APIResponse(false, e.getMessage(), null));
@@ -158,7 +167,9 @@ public class ProductController {
                 return ResponseEntity.ok(new APIResponse(false, "Products not found successfully", null));
             }
 
-            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", product));
+            List<ProductDTO> productDtos = productInterface.getConvertedProducts(product);
+
+            return ResponseEntity.ok(new APIResponse(true, "Products found successfully", productDtos));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                     new APIResponse(false, e.getMessage(), null));

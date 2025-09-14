@@ -1,20 +1,16 @@
 package com.spring.practice.dreamshop.controllers;
 
 import java.util.List;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.spring.practice.dreamshop.exception.AlreadyExistException;
 import com.spring.practice.dreamshop.exception.NotFoundException;
 import com.spring.practice.dreamshop.model.Category;
 import com.spring.practice.dreamshop.response.APIResponse;
 import com.spring.practice.dreamshop.service.category.ICategoryService;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,7 +79,7 @@ public class CategoryController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<APIResponse> update(@PathVariable Long id, @RequestBody Category category) {
         try {
             Category updatedCategory = categoryInterface.update(category, id);

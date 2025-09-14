@@ -2,7 +2,6 @@ package com.spring.practice.dreamshop.controllers;
 
 import java.sql.SQLException;
 import java.util.List;
-
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,13 +10,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import com.spring.practice.dreamshop.dto.ImageDTO;
 import com.spring.practice.dreamshop.exception.NotFoundException;
 import com.spring.practice.dreamshop.model.Image;
 import com.spring.practice.dreamshop.response.APIResponse;
 import com.spring.practice.dreamshop.service.image.IImageService;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

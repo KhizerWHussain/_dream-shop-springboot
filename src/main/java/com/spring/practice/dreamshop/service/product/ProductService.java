@@ -3,12 +3,17 @@ package com.spring.practice.dreamshop.service.product;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import com.spring.practice.dreamshop.dto.ImageDTO;
+import com.spring.practice.dreamshop.dto.ProductDTO;
 import com.spring.practice.dreamshop.exception.ProductNotFoundException;
 import com.spring.practice.dreamshop.model.Category;
+import com.spring.practice.dreamshop.model.Image;
 import com.spring.practice.dreamshop.model.Product;
 import com.spring.practice.dreamshop.repository.CategoryRepository;
+import com.spring.practice.dreamshop.repository.ImageRepository;
 import com.spring.practice.dreamshop.repository.ProductRepository;
 import com.spring.practice.dreamshop.request.AddProduct;
 import com.spring.practice.dreamshop.request.UpdateProduct;
@@ -20,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 public class ProductService implements IProductService {
     private final ProductRepository _product;
     private final CategoryRepository _category;
+    private final ImageRepository _image;
+    private final ModelMapper _modelMapper;
 
     @Override
     public Product create(AddProduct request) {
@@ -112,5 +119,21 @@ public class ProductService implements IProductService {
     @Override
     public Long countByBrandAndName(String brand, String name) {
         return _product.countByBrandAndName(brand, name);
+    }
+
+    @Override
+    public List<ProductDTO> getConvertedProducts(List<Product> products) {
+        return products.stream().map(this::convertToDTO).toList();
+    }
+
+    @Override
+    public ProductDTO convertToDTO(Product product) {
+        ProductDTO productDto = _modelMapper.map(product, ProductDTO.class);
+        List<Image> images = _image.findByProductId(product.getId());
+        List<ImageDTO> imageDtos = images.stream().map(image -> _modelMapper.map(image, ImageDTO.class)).toList();
+
+        productDto.setImages(imageDtos);
+
+        return productDto;
     }
 }
