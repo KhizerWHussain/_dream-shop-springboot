@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class CategoryController {
     private final ICategoryService categoryInterface;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<APIResponse> get() {
         try {
             List<Category> categories = categoryInterface.get();
@@ -50,6 +50,12 @@ public class CategoryController {
     public ResponseEntity<APIResponse> getById(@PathVariable Long id) {
         try {
             Category category = categoryInterface.getById(id);
+
+            if (category == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new APIResponse(false, "Category not found", null));
+            }
+
             return ResponseEntity.ok(new APIResponse(true, "Category found successfully", category));
 
         } catch (NotFoundException e) {
@@ -57,10 +63,16 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/category/{name}")
+    @GetMapping("/category/by/{name}")
     public ResponseEntity<APIResponse> getByName(@PathVariable String name) {
         try {
             Category category = categoryInterface.getByName(name);
+
+            if (category == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body(new APIResponse(false, "Category not found", null));
+            }
+
             return ResponseEntity.ok(new APIResponse(true, "Category found successfully", category));
 
         } catch (NotFoundException e) {
