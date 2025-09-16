@@ -1,7 +1,10 @@
 package com.spring.practice.dreamshop.model;
 
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -26,7 +29,8 @@ public class Cart {
     private BigDecimal amount = BigDecimal.ZERO;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CartItem> items;
+    // private Set<CartItem> items;
+    private Set<CartItem> items = new HashSet<>();
 
     public void add(CartItem item) {
         this.items.add(item);

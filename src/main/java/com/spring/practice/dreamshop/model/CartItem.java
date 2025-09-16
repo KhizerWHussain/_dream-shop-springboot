@@ -2,6 +2,8 @@ package com.spring.practice.dreamshop.model;
 
 import java.math.BigDecimal;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -26,6 +28,7 @@ public class CartItem {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+
     private Product product;
     private int quantity;
     private BigDecimal unit_price;
@@ -33,6 +36,7 @@ public class CartItem {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
+    @JsonIgnore
     private Cart cart;
 
     public void setTotal_Price() {

@@ -1,14 +1,11 @@
 package com.spring.practice.dreamshop.service.carts;
 
 import java.math.BigDecimal;
-
 import org.springframework.stereotype.Service;
-
 import com.spring.practice.dreamshop.exception.NotFoundException;
 import com.spring.practice.dreamshop.model.Cart;
 import com.spring.practice.dreamshop.repository.CartItemRepository;
 import com.spring.practice.dreamshop.repository.CartRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -41,4 +38,9 @@ public class CartService implements ICartService {
         return cart.getAmount();
     }
 
+    @Override
+    public Long init() {
+        Cart cart = new Cart();
+        return _cart.save(cart).getId();
+    }
 }
