@@ -1,7 +1,9 @@
 package com.spring.practice.dreamshop.service.user;
 
 import org.springframework.stereotype.Service;
+import com.spring.practice.dreamshop.exception.NotFoundException;
 import com.spring.practice.dreamshop.model.User;
+import com.spring.practice.dreamshop.repository.UserRepository;
 import com.spring.practice.dreamshop.request.CreateUserRequest;
 import com.spring.practice.dreamshop.request.UpdateUserRequest;
 import lombok.RequiredArgsConstructor;
@@ -9,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class UserService implements IUserService {
+    private final UserRepository _user;
 
     @Override
     public User read(Long id) {
-        throw new UnsupportedOperationException("Unimplemented method 'read'");
+        return _user.findById(id)
+                .orElseThrow(() -> new NotFoundException("User not found"));
     }
 
     @Override
