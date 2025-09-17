@@ -35,7 +35,7 @@ public class CartController {
     public ResponseEntity<APIResponse> clear(@PathVariable Long id) {
         try {
             cartInterface.clear(id);
-            return ResponseEntity.ok(new APIResponse(true, "Cart found successfully", null));
+            return ResponseEntity.ok(new APIResponse(true, "Cart deleted successfully", null));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIResponse(false, e.getMessage(), null));
         }

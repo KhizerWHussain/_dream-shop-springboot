@@ -6,6 +6,7 @@ import com.spring.practice.dreamshop.exception.NotFoundException;
 import com.spring.practice.dreamshop.model.Cart;
 import com.spring.practice.dreamshop.repository.CartItemRepository;
 import com.spring.practice.dreamshop.repository.CartRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -23,6 +24,7 @@ public class CartService implements ICartService {
         return _cart.save(cart);
     }
 
+    @Transactional
     @Override
     public void clear(Long id) {
         Cart cart = read(id);
@@ -42,5 +44,16 @@ public class CartService implements ICartService {
     public Long init() {
         Cart cart = new Cart();
         return _cart.save(cart).getId();
+    }
+
+    @Override
+    public Cart findByUserId(Long user_id) {
+        // List<Cart> carts = _cart.findAll();
+        // return carts
+        // .stream()
+        // .filter(item -> item.getUser().getId().equals(user_id))
+        // .findFirst()
+        // .orElse(null);
+        return _cart.findByUserId(user_id);
     }
 }

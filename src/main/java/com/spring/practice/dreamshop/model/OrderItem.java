@@ -1,8 +1,6 @@
 package com.spring.practice.dreamshop.model;
 
 import java.math.BigDecimal;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,25 +17,27 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class CartItem {
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private int quantity;
+    private BigDecimal price;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
+
     @ManyToOne
     @JoinColumn(name = "product_id")
-
     private Product product;
-    private int quantity;
-    private BigDecimal unit_price;
-    private BigDecimal total_price;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "cart_id")
-    @JsonIgnore
-    private Cart cart;
-
-    public void setTotal_Price() {
-        this.total_price = this.unit_price.multiply(new BigDecimal(quantity));
+    public OrderItem(int quantity, BigDecimal price, Order order, Product product) {
+        this.quantity = quantity;
+        this.price = price;
+        this.order = order;
+        this.product = product;
     }
+
 }
