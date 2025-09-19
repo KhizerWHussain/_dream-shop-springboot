@@ -4,7 +4,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import com.spring.practice.dreamshop.dto.OrderDTO;
 import com.spring.practice.dreamshop.enums.OrderStatus;
 import com.spring.practice.dreamshop.exception.NotFoundException;
 import com.spring.practice.dreamshop.model.Cart;
@@ -22,6 +24,7 @@ public class OrderService implements IOrderService {
     private final OrderRepository _order;
     private final ProductRepository _product;
     private final ICartService cartInterface;
+    private final ModelMapper modelMapper;
 
     @Override
     public Order create(Long user_id) {
@@ -39,15 +42,18 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public Order read(Long id) {
+    public OrderDTO read(Long id) {
         return _order
                 .findById(id)
+                .map(this::convert_to_dto)
                 .orElseThrow(() -> new NotFoundException("Order not found"));
     }
 
     @Override
-    public List<Order> getUserOrders(Long user_id) {
-        return _order.findByUserId(user_id);
+    public List<OrderDTO> getUserOrders(Long user_id) {
+        List<Order> orders = _order.findByUserId(user_id);
+        return orders.stream().map(this::convert_to_dto).toList();
+
     }
 
     private Order init(Cart cart) {
@@ -76,5 +82,9 @@ public class OrderService implements IOrderService {
                 .map(item -> item.getPrice()
                         .multiply(new BigDecimal(item.getQuantity())))
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private OrderDTO convert_to_dto(Order order) {
+        return modelMapper.map(order, OrderDTO.class);
     }
 }
