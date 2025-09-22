@@ -1,7 +1,7 @@
 package com.spring.practice.dreamshop.dto;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Set;
 import com.spring.practice.dreamshop.enums.OrderStatus;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.Data;
 public class OrderDTO {
     private Long id;
     private Long user_id;
-    private LocalDateTime datetime;
+    private LocalDate datetime;
     private BigDecimal amount;
     private OrderStatus status;
     private Set<OrderItemDTO> items;

@@ -12,7 +12,6 @@ import com.spring.practice.dreamshop.response.APIResponse;
 import com.spring.practice.dreamshop.service.carts.ICartItemService;
 import com.spring.practice.dreamshop.service.carts.ICartService;
 import com.spring.practice.dreamshop.service.user.IUserService;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,11 +47,11 @@ public class CartItemController {
             @RequestParam Long product_id,
             @RequestParam int quantity) {
         try {
-            User user = userInterace.read(1L);
+            User user = userInterace.read(2L);
             Cart new_cart = cartInterface.init_with_user(user);
             cartItemInterface.add(new_cart.getId(), product_id, quantity);
 
-            return ResponseEntity.ok(new APIResponse(true, "Item added to cart successfully", product_id));
+            return ResponseEntity.ok(new APIResponse(true, "Item added to cart successfully", null));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new APIResponse(false, e.getMessage(), null));
         }

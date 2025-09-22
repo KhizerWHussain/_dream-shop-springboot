@@ -2,11 +2,13 @@ package com.spring.practice.dreamshop.controllers;
 
 import java.util.Collections;
 import java.util.List;
+import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spring.practice.dreamshop.dto.ProductDTO;
+import com.spring.practice.dreamshop.exception.AlreadyExistException;
 import com.spring.practice.dreamshop.exception.NotFoundException;
 import com.spring.practice.dreamshop.model.Product;
 import com.spring.practice.dreamshop.request.AddProduct;
@@ -50,12 +52,20 @@ public class ProductController {
     @PostMapping("/create")
     public ResponseEntity<APIResponse> create(@RequestBody AddProduct product) {
         try {
+
+            if (product.getCategory() == null || product.getCategory().getName() == "") {
+                throw new BadRequestException("Category name cannot be empty string");
+            }
+
             Product prod = productInterface.create(product);
             ProductDTO productDto = productInterface.convertToDTO(prod);
 
             return ResponseEntity.ok(new APIResponse(true, "Product created successfully", productDto));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        } catch (AlreadyExistException e) {
+            return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(new APIResponse(false, e.getMessage(), null));
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new APIResponse(false, e.getMessage(), null));
         }
 

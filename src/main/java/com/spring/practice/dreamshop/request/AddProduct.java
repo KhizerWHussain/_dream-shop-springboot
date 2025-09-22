@@ -1,9 +1,7 @@
 package com.spring.practice.dreamshop.request;
 
 import java.math.BigDecimal;
-
 import com.spring.practice.dreamshop.model.Category;
-
 import lombok.Data;
 
 @Data

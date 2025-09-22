@@ -25,7 +25,7 @@ public class OrderController {
     @PostMapping("/create/{user_id}")
     public ResponseEntity<APIResponse> create(@PathVariable Long user_id) {
         try {
-            Order order = orderInterface.create(user_id);
+            OrderDTO order = orderInterface.create(user_id);
             return ResponseEntity.ok(new APIResponse(true, "Order places successfully", order));
         } catch (Exception e) {
             return ResponseEntity

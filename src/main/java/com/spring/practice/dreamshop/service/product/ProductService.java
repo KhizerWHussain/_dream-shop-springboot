@@ -2,10 +2,13 @@ package com.spring.practice.dreamshop.service.product;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.apache.coyote.BadRequestException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import com.spring.practice.dreamshop.dto.ImageDTO;
 import com.spring.practice.dreamshop.dto.ProductDTO;
+import com.spring.practice.dreamshop.exception.AlreadyExistException;
 import com.spring.practice.dreamshop.exception.ProductNotFoundException;
 import com.spring.practice.dreamshop.model.Category;
 import com.spring.practice.dreamshop.model.Image;
@@ -27,6 +30,12 @@ public class ProductService implements IProductService {
 
     @Override
     public Product create(AddProduct request) {
+        if (exists(request.getName(), request.getBrand())) {
+            throw new AlreadyExistException(
+                    request.getBrand() + " " + request.getName()
+                            + " already exists, you may update this product instead");
+        }
+
         Category category = Optional.ofNullable(_category.findByName(request.getCategory().getName()))
                 .orElseGet(() -> {
                     Category newCategory = new Category(request.getCategory().getName());
@@ -123,6 +132,10 @@ public class ProductService implements IProductService {
         return products.stream().map(this::convertToDTO).toList();
     }
 
+    private Boolean exists(String name, String brand) {
+        return _product.existsByNameAndBrand(name, brand);
+    }
+
     @Override
     public ProductDTO convertToDTO(Product product) {
         ProductDTO productDto = _modelMapper.map(product, ProductDTO.class);
@@ -130,7 +143,6 @@ public class ProductService implements IProductService {
         List<ImageDTO> imageDtos = images.stream().map(image -> _modelMapper.map(image, ImageDTO.class)).toList();
 
         productDto.setImages(imageDtos);
-
         return productDto;
     }
 }

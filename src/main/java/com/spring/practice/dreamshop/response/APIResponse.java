@@ -9,5 +9,4 @@ public class APIResponse {
     private Boolean status;
     private String message;
     private Object data;
-
 }

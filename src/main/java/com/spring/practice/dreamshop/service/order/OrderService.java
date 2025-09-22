@@ -16,6 +16,7 @@ import com.spring.practice.dreamshop.model.Product;
 import com.spring.practice.dreamshop.repository.OrderRepository;
 import com.spring.practice.dreamshop.repository.ProductRepository;
 import com.spring.practice.dreamshop.service.carts.ICartService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -26,19 +27,30 @@ public class OrderService implements IOrderService {
     private final ICartService cartInterface;
     private final ModelMapper modelMapper;
 
+    @Transactional
     @Override
-    public Order create(Long user_id) {
+    public OrderDTO create(Long user_id) {
         Cart cart = cartInterface.findByUserId(user_id);
         Order order = init(cart);
+
+        System.out.println("order ==? " + order);
 
         List<OrderItem> orderItems = create_order_items(order, cart);
         order.setItems(new HashSet<>(orderItems));
         order.setAmount(calculate_amount(orderItems));
 
-        Order savedOrder = _order.save(order);
+        System.out.println("order ==? now =+> " + order);
 
+        Order savedOrder = _order.save(order);
         cartInterface.clear(cart.getId());
-        return savedOrder;
+
+        System.out.println("savedOrder ==> " + savedOrder);
+
+        OrderDTO savedOrderDto = convert_to_dto(savedOrder);
+
+        System.out.println("savedOrderDto ==> " + savedOrderDto);
+
+        return savedOrderDto;
     }
 
     @Override
