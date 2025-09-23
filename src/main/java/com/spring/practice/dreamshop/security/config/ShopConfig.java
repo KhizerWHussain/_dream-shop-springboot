@@ -68,7 +68,6 @@ public class ShopConfig {
         http.authenticationProvider(daoAuthenticationProvider());
         http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
-
     }
 
 }

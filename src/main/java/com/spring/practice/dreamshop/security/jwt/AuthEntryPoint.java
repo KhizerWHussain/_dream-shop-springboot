@@ -26,7 +26,7 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
         body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
         body.put("error", "Unauthorized");
         body.put("message", "You may login and try again!");
-        body.put("route", request.getServletPath());
+        body.put("servlet_path", request.getServletPath());
 
         final ObjectMapper mapper = new ObjectMapper();
         mapper.writeValue(response.getOutputStream(), body);
